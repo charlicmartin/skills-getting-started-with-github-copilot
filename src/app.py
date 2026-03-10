@@ -21,26 +21,43 @@ app.mount("/static", StaticFiles(directory=os.path.join(Path(__file__).parent,
 
 # In-memory activity database
 activities = {
-    "Chess Club": {
-        "description": "Learn strategies and compete in chess tournaments",
-        "schedule": "Fridays, 3:30 PM - 5:00 PM",
+    "Basketball Team": {
+        "description": "Play competitive basketball games",
+        "schedule": "Mondays and Wednesdays, 4:00 PM - 5:30 PM",
+        "max_participants": 15,
+        "participants": []
+    },
+    "Soccer Club": {
+        "description": "Join the school soccer team",
+        "schedule": "Tuesdays and Thursdays, 4:00 PM - 5:30 PM",
         "max_participants": 12,
-        "participants": ["michael@mergington.edu", "daniel@mergington.edu"]
+        "participants": []
     },
-    "Programming Class": {
-        "description": "Learn programming fundamentals and build software projects",
-        "schedule": "Tuesdays and Thursdays, 3:30 PM - 4:30 PM",
-        "max_participants": 20,
-        "participants": ["emma@mergington.edu", "sophia@mergington.edu"]
+    "Drama Club": {
+        "description": "Act in school plays and participate in theatrical productions",
+        "schedule": "Fridays, 3:00 PM - 4:30 PM",
+        "max_participants": 10,
+        "participants": []
     },
-    "Gym Class": {
-        "description": "Physical education and sports activities",
-        "schedule": "Mondays, Wednesdays, Fridays, 2:00 PM - 3:00 PM",
-        "max_participants": 30,
-        "participants": ["john@mergington.edu", "olivia@mergington.edu"]
+    "Art Club": {
+        "description": "Create and display artwork in the school gallery",
+        "schedule": "Wednesdays, 3:00 PM - 4:30 PM",
+        "max_participants": 15,
+        "participants": []
+    },
+    "Debate Team": {
+        "description": "Participate in debate competitions and discussions",
+        "schedule": "Thursdays, 3:30 PM - 5:00 PM",
+        "max_participants": 8,
+        "participants": []
+    },
+    "Science Olympiad": {
+        "description": "Compete in science-related challenges and events",
+        "schedule": "Fridays, 2:30 PM - 4:00 PM",
+        "max_participants": 12,
+        "participants": []
     }
 }
-
 
 @app.get("/")
 def root():
@@ -61,6 +78,11 @@ def signup_for_activity(activity_name: str, email: str):
 
     # Get the specific activity
     activity = activities[activity_name]
+
+    # Check if student is already signed up
+    if email in activity["participants"]:
+        raise HTTPException(status_code=400, detail="Student already signed up")
+    
 
     # Add student
     activity["participants"].append(email)
